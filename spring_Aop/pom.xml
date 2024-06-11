@@ -50,6 +50,14 @@
       <artifactId>aspectjweaver</artifactId>
       <version>1.9.7</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>5.2.18.RELEASE</version>
+    </dependency>
+
     <!--此处需要注意的是，spring5 及以上版本要求 junit 的版本必须是 4.12 及以上-->
     <dependency>
       <groupId>org.springframework</groupId>

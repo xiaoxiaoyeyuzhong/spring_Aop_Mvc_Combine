@@ -17,6 +17,11 @@
     <!-- 业务bean -->
     <bean id="serviceA" class="com.fengdetian.aop.ServiceA" ></bean>
 
+    <!-- 业务bean -->
+    <bean id="serviceC" class="com.fengdetian.aop.ServiceC" >
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
     <!-- 通知bean -->
     <bean id="AopInterceptor" class="com.fengdetian.aop.AopInterceptor"></bean>
 
@@ -38,4 +43,36 @@
             <aop:around method="somethingAround" pointcut-ref="allMethodInService" />
         </aop:aspect>
     </aop:config>
+
+    <!-- “事务通知”用专有标签声明，依赖事务管理器 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 用于配置事务属性 -->
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="*" /> <!-- 与事务属性关联的方法名。 -->
+        </tx:attributes>
+    </tx:advice>
+
+
+    <!-- 事务管理器由Spring实现，不同持久层有不同事务管理器 -->
+    <!-- JDBC事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 依赖DataSource -->
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="rollbackOnCommitFailure" value="true"></property>
+    </bean>
+
+    <!--配置数据源-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 配置DataSource  -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="${jdbc.driver}"/>
+    <property name="jdbcUrl" value="${jdbc.url}"/>
+    <property name="user" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+    </bean>
+
 </beans>
