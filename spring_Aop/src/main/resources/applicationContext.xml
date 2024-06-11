@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 业务bean -->
+    <bean id="serviceA" class="com.fengdetian.aop.ServiceA" ></bean>
+
+    <!-- 通知bean -->
+    <bean id="AopInterceptor" class="com.fengdetian.aop.AopInterceptor"></bean>
+
+    <!-- aop配置 -->
+    <aop:config>
+        <!-- 切入点声明，expression为表达式，id可在其他地方引用 -->
+        <aop:pointcut expression="execution(* com.fengdetian.aop.Service*.*(..)) "
+                      id="allMethodInService" />
+        <!-- 连接切入点和通知（事务通知） -->
+<!--          <aop:advisor advice-ref="txAdvice" pointcut-ref="allMethodInService" />  -->
+        <!-- 切面声明，ref指向通知bean -->
+        <aop:aspect ref="AopInterceptor">
+            <!-- 前置通知声明， method为通知bean的方法名，pointcut-ref将切入点和通知关联起来 -->
+            <aop:before method="somethingBefore" pointcut-ref="allMethodInService" />
+            <!-- 后置通知声明 -->
+            <aop:after-returning method="somethingAfterReturn"
+                                 pointcut-ref="allMethodInService"/>
+            <!-- 环绕通知声明 -->
+            <aop:around method="somethingAround" pointcut-ref="allMethodInService" />
+        </aop:aspect>
+    </aop:config>
+</beans>
