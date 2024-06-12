@@ -28,4 +28,9 @@ public class AOPTest {
         serviceA.addAccount("aop测试","测试");
     }
 
+    @Test
+    public void addUserTest() throws SQLException {
+        serviceC.addUser();
+    }
+
 }
