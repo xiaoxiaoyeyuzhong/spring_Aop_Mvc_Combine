@@ -5,4 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public interface AccountDao {
     public void  updateAccount(String name,double money );
+
+    public void  transfer(String name,double money);
 }

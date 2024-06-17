@@ -13,4 +13,8 @@ public class AccountDaoImpl implements AccountDao {
     public void updateAccount(String name, double money) {
         jdbcTemplate.update("insert into account(username,money) values(?,?)",name,money);
     }
+
+    public void transfer(String name ,double money) {
+        jdbcTemplate.update("update account set money=money+? where username=?",money,name);
+    }
 }

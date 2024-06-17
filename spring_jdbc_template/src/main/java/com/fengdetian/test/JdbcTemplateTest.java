@@ -1,9 +1,13 @@
 package com.fengdetian.test;
 
+import com.fengdetian.bean.Emp;
 import com.fengdetian.bean.UserInfo;
 import com.fengdetian.service.AccountService;
+import com.fengdetian.service.EmpService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -11,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,6 +23,7 @@ import java.util.List;
 @ContextConfiguration(value = {"classpath:applicationContext.xml"})
 public class JdbcTemplateTest {
 
+    private  static final Logger log= LoggerFactory.getLogger(JdbcTemplateTest.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -65,6 +71,40 @@ public class JdbcTemplateTest {
     private AccountService accountService;
     @Test
     public void testAccounts(){
-        accountService.updateAccount("fengdetian", 1000);
+        accountService.updateAccount("yinsen", 1000);
+    }
+
+    @Test
+    public void testTranfer(){
+        accountService.transfer("fengdetian", "yinsen", 2000);
+        accountService.transfer("yinsen", "fengdetian", 1000);
+//        throw new RuntimeException();
+    }
+
+    @Autowired
+    private EmpService empService;
+
+    private Emp emp = new Emp(1,"yinsen","软件工程师","zhouxiexin", LocalDateTime.now(),5000,1000,1);
+    @Test
+    public void testEmpAdd(){
+        //1,"yinsen","软件工程师","zhouxiexin", LocalDateTime.now(),5000,1000,1
+        empService.addEmp(emp);
+    }
+
+    @Test
+    public void testEmpFind(){
+        System.out.println(empService.findEmp(1));
+        log.info("{}",empService.findEmp(1));
+    }
+
+    @Test
+    public void testEmpUpdate(){
+        emp.setJob("java程序员");
+        empService.updateEmp(emp);
+    }
+
+    @Test
+    public void testEmpRemove(){
+        empService.removeEmp(6);
     }
 }

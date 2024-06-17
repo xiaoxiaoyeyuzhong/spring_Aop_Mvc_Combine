@@ -19,4 +19,12 @@ public class AccountServiceImpl implements AccountService {
     public void updateAccount(String name, double money) {
         accountDao.updateAccount(name, money);
     }
+
+    //转账
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
+    public void transfer(String fromName, String toName, double money) {
+        accountDao.transfer(fromName, -money);
+        accountDao.transfer(toName, money);
+//        throw new RuntimeException();
+    }
 }
